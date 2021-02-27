@@ -4,18 +4,11 @@ app = Flask(__name__)
 
 @app.route("/")
 def index():
+    return render_template("index.html")
 
-    f = open("data.txt", "r")
-    count = int(f.read())
-    f.close()
-
-    count += 1
-
-    f = open("data.txt", "w")
-    f.write(str(count))
-    f.close()
-
-    return render_template("index.html", count=count)
+@app.route("/a")
+def index():
+    return render_template("a.html")
 
 if __name__ == "__main__":
     app.run()
