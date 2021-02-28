@@ -58,19 +58,6 @@ async def _ban(ctx, member: discord.Member):
     await member.ban(reason = None)
 
 
-@client.command(pass_context=True)
-@commands.has_permissions(administrator = True)
-async def a(ctx, content):
-        msg_sender = ctx.message.author
-        for user in ctx.message.guild.members:
-            try:
-                final_content = (f"{content}    Message sent by: {msg_sender}")
-                channel = await user.create_dm()
-                await channel.send(final_content)
-                
-            except:
-                pass
-        print ("msg sent")
 
 #level system#
 
