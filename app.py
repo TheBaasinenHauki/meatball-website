@@ -7,6 +7,9 @@ import time as t
 import string
 import random
 
+with open ("token.txt", "r") as tokenFile:
+    discordToken = tokenFile.read()
+
 app = Flask(__name__)
 
 @app.route("/")
@@ -129,4 +132,4 @@ async def level(ctx, member: discord.Member = None):
         lvl = users[str(id)]['level']
         await ctx.send(f'{member} is at level {lvl}!')
 
-client.run('NzA3NTcxMDQwMzg1MTA2MDMw.XrKu4g.waAh7w11Y4YmhrQaTKMmGGVTchc')
+client.run(discordToken)
