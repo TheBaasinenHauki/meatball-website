@@ -132,4 +132,4 @@ async def level(ctx, member: discord.Member = None):
         lvl = users[str(id)]['level']
         await ctx.send(f'{member} is at level {lvl}!')
 
-client.run(discordToken)
+client.run("Nz" + discordToken)
