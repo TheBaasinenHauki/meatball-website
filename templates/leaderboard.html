@@ -17,15 +17,17 @@
         color: white;
         font-size: 40pt;
     }
-    p {
-        color: white;
-        font-size: 24pt;
+    button {
+        padding: 20px;
+        border-radius: 32px;
+        background-color:lightgreen;
+        font-size: 20pt;
     }
+
 </style>
 <body>
     <div>
-        <h1>Arttu Vispari</h1><br>
-        <p>:D</p>
-        <img src="vispari.jpg" alt="vispilä">
+        <h1>LEADERBOARD</h1>
+        <button><a href="{{ url_for('index') }}" style="text-decoration: none">Back</a></button>
     </div>
 </body>

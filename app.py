@@ -6,9 +6,9 @@ app = Flask(__name__)
 def index():
     return render_template("index.html")
 
-@app.route("/a")
-def a():
-    return render_template("a.html")
+@app.route("/leaderboard")
+def leaderboard():
+    return render_template("leaderboard.html")
 
 if __name__ == "__main__":
     app.run()
