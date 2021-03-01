@@ -39,7 +39,6 @@ async def on_member_join(member):
 
 @client.event
 async def on_member_remove(member):
-    await member.send('https://media.discordapp.net/attachments/758256181415641088/760489357164806204/IMG-20200929-WA0000.jpg?width=619&height=350')
     linkCH = client.get_channel(496299897365200908)
     link = await linkCH.create_invite(max_age = 600)
     await member.send(link)
@@ -68,6 +67,7 @@ async def on_message(message):
             users = json.load(f)
 
         await update_data(users, message.author)
+        await add_message_count(users, message.author)
         await add_experience(users, message.author, 5)
         await level_up(users, message.author, message)
 
@@ -76,11 +76,16 @@ async def on_message(message):
 
     await client.process_commands(message)
 
+async def add_message_count(users, user):
+    message_count = users[f'{user.id}']['messages']
+    users[f'{user.id}']['messages'] = message_count + 1
+
 async def update_data(users, user):
     if not f'{user.id}' in users:
         users[f'{user.id}'] = {}
         users[f'{user.id}']['experience'] = 0
         users[f'{user.id}']['level'] = 1
+        users[f'{user.id}']['messages'] = 0
 
 async def add_experience(users, user, exp):
     users[f'{user.id}']['experience'] += exp
@@ -88,20 +93,21 @@ async def add_experience(users, user, exp):
 async def level_up(users, user, message):
     experience = users[f'{user.id}']['experience']
     lvl_start = users[f'{user.id}']['level']
-    lvl_end = int(experience ** (1 / 6))
+    lvl_end = int(experience ** (1/6))
     if lvl_start < lvl_end:
         await message.channel.send(f'{user.mention} has leveled up to level {lvl_end}')
         users[f'{user.id}']['level'] = lvl_end
         
 @client.command()
-async def level(ctx, member: discord.Member = None):
+async def stats(ctx, member: discord.Member = None):
     if not member:
         id = ctx.message.author.id
         with open('users.json', 'r') as f:
             users = json.load(f)
         lvl = users[str(id)]['level']
         usr_xp = users[str(id)]['experience']
-        await ctx.send(f'level: {lvl} \n XP: {usr_xp}')
+        usr_msg = users[str(id)]['messages']
+        await ctx.send(f' Level: {lvl} \n XP: {usr_xp} \n Messages: {usr_msg}')
     else:
         id = member.id
         with open('users.json', 'r') as f:
