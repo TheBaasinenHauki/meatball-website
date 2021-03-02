@@ -58,7 +58,9 @@ async def _ban(ctx, member: discord.Member):
 
 
 
-#level system#
+###############################################################################################
+#-------------------------------------------Level on_message----------------------------------#
+###############################################################################################
 
 @client.event
 async def on_message(message):
@@ -74,7 +76,31 @@ async def on_message(message):
         with open('users.json', 'w') as f:
             json.dump(users, f)
 
+        await get_user_names()
+
     await client.process_commands(message)
+
+#---------------------------------------------Level Functions--------------------------------------------#
+
+async def get_user_names():
+    user_id_file = {}
+    with open('users_id.json', 'w') as f:
+        pass
+
+    with open('users.json', 'r') as p:
+        users = json.load(p)
+
+    for user in users:
+        user_int = int(user)
+        user_object = client.get_user(user_int)
+        user_if_name = user_object.name
+        user_id_file[f"{user_if_name}"] = {}
+        user_id_file[f"{user_if_name}"]['experience'] = users[f"{user}"]['experience']
+        user_id_file[f"{user_if_name}"]['level'] = users[f"{user}"]['level']
+        user_id_file[f"{user_if_name}"]['messages'] = users[f"{user}"]['messages']
+
+    with open('users_id.json', 'w') as f:
+        json.dump(user_id_file, f)
 
 async def add_message_count(users, user):
     message_count = users[f'{user.id}']['messages']
@@ -114,5 +140,7 @@ async def stats(ctx, member: discord.Member = None):
             users = json.load(f)
         lvl = users[str(id)]['level']
         await ctx.send(f'{member} is at level {lvl}!')
+
+#Token#
 
 client.run("Nz" + discordToken)
