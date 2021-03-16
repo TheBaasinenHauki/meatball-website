@@ -17,6 +17,7 @@ def leaderboard():
 
     template = Template(s)
     content = template.render(dict_item = users)
+    print(content)
     return render_template("leaderboard.html", user_data = content)
 
 if __name__ == "__main__":
