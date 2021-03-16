@@ -4,7 +4,7 @@ from jinja2 import Template
 
 app = Flask(__name__)
 
-s = "{% for user, level in dict_item.items() %}{{user}} {{level}} \n{% endfor %}"
+
 
 @app.route("/")
 def index():
@@ -14,6 +14,8 @@ def index():
 def leaderboard():
     with open('users_id.json', 'r') as p:
         users = json.load(p)
+
+    s = "{% for user, level in dict_item.items() %}{{user}} {{level}} \n{% endfor %}"
 
     template = Template(s)
     content = template.render(dict_item = users)
