@@ -18,7 +18,7 @@ client = commands.Bot(command_prefix = '.')
 @client.event
 async def on_ready():
     await client.change_presence(status=discord.Status.online, activity=discord.Game('meatballbot.me'))
-
+    print("online")
 @client.event
 async def on_command_error(ctx, error):
     if isinstance(error, CommandNotFound):
