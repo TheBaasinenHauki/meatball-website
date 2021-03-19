@@ -49,6 +49,7 @@ praw==7.0.0
 prawcore==1.3.0
 ptyprocess==0.6.0
 python-dateutil==2.8.1
+PyDrive==1.3.1
 pytz==2020.1
 requests==2.23.0
 rfc3986==1.4.0
