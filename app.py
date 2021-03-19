@@ -1,6 +1,14 @@
 from flask import Flask, render_template
 import json
 from jinja2 import Template
+from pydrive.auth import GoogleAuth
+from pydrive.drive import GoogleDrive
+import ast
+
+gauth = GoogleAuth()
+gauth.LocalWebserverAuth()
+drive = GoogleDrive(gauth)
+
 
 app = Flask(__name__)
 
@@ -12,6 +20,17 @@ def index():
 
 @app.route("/leaderboard")
 def leaderboard():
+
+    with open('users_id.json', 'w') as k:
+        pass
+
+    save_data_drive = drive.CreateFile({'id': '13zDkqN5uhG0_jaoqCC_csZKjTnX6EX15'})
+    save_data = save_data_drive.GetContentString()
+    save_dict = ast.literal_eval(save_data)
+
+    with open('users_id.json', 'w') as k:
+        json.dump(save_dict, k)
+
     with open('users_id.json', 'r') as p:
         users = json.load(p)
 

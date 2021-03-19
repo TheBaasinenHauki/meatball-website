@@ -5,6 +5,23 @@ from discord.ext.commands import CommandNotFound
 import time as t
 import string
 import random
+from pydrive.auth import GoogleAuth
+from pydrive.drive import GoogleDrive
+import ast
+
+gauth = GoogleAuth()
+gauth.LocalWebserverAuth()
+drive = GoogleDrive(gauth)
+
+with open('users.json', 'w') as k:
+    pass
+
+save_data_drive = drive.CreateFile({'id': '1vbstOhhmjuqR6CtkfowG361EHTFtAKNl'})
+save_data = save_data_drive.GetContentString()
+save_dict = ast.literal_eval(save_data)
+
+with open('users.json', 'w') as k:
+    json.dump(save_dict, k)
 
 with open ("token.txt", "r") as tokenFile:
     discordToken = tokenFile.read()
@@ -19,6 +36,7 @@ client = commands.Bot(command_prefix = '.')
 async def on_ready():
     await client.change_presence(status=discord.Status.online, activity=discord.Game('meatballbot.me'))
     print("online")
+
 @client.event
 async def on_command_error(ctx, error):
     if isinstance(error, CommandNotFound):
@@ -102,6 +120,20 @@ async def get_user_names():
     with open('users_id.json', 'w') as f:
         json.dump(user_id_file, f)
 
+    with open('users_id.json', 'r') as t:
+        google_drive = json.load(t)
+
+    with open('users.json', 'r')as z:
+        google_drive2 = json.load(z)
+
+    google_file = drive.CreateFile({'id': '13zDkqN5uhG0_jaoqCC_csZKjTnX6EX15'})
+    google_file.SetContentString(str(google_drive))
+    google_file.Upload()
+
+    google_file2 = drive.CreateFile({'id': '1vbstOhhmjuqR6CtkfowG361EHTFtAKNl'})
+    google_file2.SetContentString(str(google_drive2))
+    google_file2.Upload()
+
 async def add_message_count(users, user):
     message_count = users[f'{user.id}']['messages']
     users[f'{user.id}']['messages'] = message_count + 1
@@ -119,7 +151,7 @@ async def add_experience(users, user, exp):
 async def level_up(users, user, message):
     experience = users[f'{user.id}']['experience']
     lvl_start = users[f'{user.id}']['level']
-    lvl_end = int(experience ** (4/10))
+    lvl_end = int(experience ** (3/10))
     if lvl_start < lvl_end:
         await message.channel.send(f'{user.mention} has leveled up to level {lvl_end}')
         users[f'{user.id}']['level'] = lvl_end
@@ -128,12 +160,13 @@ async def level_up(users, user, message):
 async def stats(ctx, member: discord.Member = None):
     if not member:
         id = ctx.message.author.id
+        mention_id = client.get_user(id)
         with open('users.json', 'r') as f:
             users = json.load(f)
         lvl = users[str(id)]['level']
         usr_xp = users[str(id)]['experience']
         usr_msg = users[str(id)]['messages']
-        await ctx.send(f' Level: {lvl} \n XP: {usr_xp} \n Messages: {usr_msg}')
+        await ctx.send(f'{mention_id.mention} \n Level: {lvl} \n XP: {usr_xp} \n Messages: {usr_msg}')
     else:
         id = member.id
         with open('users.json', 'r') as f:
